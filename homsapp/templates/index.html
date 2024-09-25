@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_index.css' %}">
+    <script src="{% static 'homsapp/script.js' %}"></script>
+    <link href="https://fonts.cdnfonts.com/css/apercu-pro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet" />
+    <title>Home</title>
+</head>
+<body>
+    <header>
+        <img class="logo" src="{% static '/media/Logo.png' %}" />
+        {% if user.is_authenticated %}
+            <span class="username">{{ user.nome }}</span>
+        {% endif %}
+    </header>
+    <div class="bodyAll">
+        <div class="BarraLateral">
+            <nav>
+              <ul>
+                <li><a class="selecionado" href="{% url 'index' %}">Consulta de Imóveis</a></li>
+                <li><a href="{% url 'mapa' %}">Mapeamento</a></li>
+        
+                {% if user.is_authenticated and user.tipo_usuario == 'admin' %}
+                  <li><a href="{% url 'processar_csv' %}">Carregar CSV</a></li>
+                {% endif %}
+              </ul>
+            </nav>
+        </div>
+        <div class="pesquisa_tabela">
+            <form class="pesquisa" action="{% url 'index' %}" method="get">
+                <div class="select">
+                    <select name="filter" id="filter">
+                        <option value="numero_contribuinte" {% if selected_filter == 'numero_contribuinte' %}selected{% endif %}>Número Contribuinte</option>
+                        <option value="ano_exercicio" {% if selected_filter == 'ano_exercicio' %}selected{% endif %}>Ano Exercício</option>
+                        <option value="codlog_imovel" {% if selected_filter == 'codlog_imovel' %}selected{% endif %}>Codlog Imovel</option>
+                        <option value="cep" {% if selected_filter == 'cep' %}selected{% endif %}>CEP</option>
+                        <option value="endereco" {% if selected_filter == 'endereco' %}selected{% endif %}>Endereço</option>
+                        <option value="area_terreno" {% if selected_filter == 'area_terreno' %}selected{% endif %}>Área Terreno</option>
+                        <option value="area_construida" {% if selected_filter == 'area_construida' %}selected{% endif %}>Área Construída</option>
+                        <option value="area_ocupada" {% if selected_filter == 'area_ocupada' %}selected{% endif %}>Área Ocupada</option>
+                        <option value="valor_m2_terreno" {% if selected_filter == 'valor_m2_terreno' %}selected{% endif %}>Valor m2 Terreno</option>
+                        <option value="valor_m2_construcao" {% if selected_filter == 'valor_m2_construcao' %}selected{% endif %}>Valor m2 Construção</option>
+                        <option value="ano_construcao_corrigido" {% if selected_filter == 'ano_construcao_corrigido' %}selected{% endif %}>Ano Construção Corrigido</option>
+                        <option value="pavimentos" {% if selected_filter == 'pavimentos' %}selected{% endif %}>Pavimentos</option>
+                        <option value="tipo_uso_imovel" {% if selected_filter == 'tipo_uso_imovel' %}selected{% endif %}>Tipo Uso Imovel</option>
+                        <option value="fator_obsolescencia" {% if selected_filter == 'fator_obsolescencia' %}selected{% endif %}>Fator Obsolescência</option>
+                    </select>
+                </div>
+                <!-- Mantém o texto da pesquisa no input -->
+                <input type="text" id="search_query" name="q" value="{{ query }}" placeholder="Digite sua pesquisa aqui">
+                <button class="btnBuscar">Buscar</button>
+            </form>
+    
+            {% if query and not imoveis %}
+                <p class="Frase">Nenhum imóvel encontrado.</p>
+            {% else %}
+                <p class="Frase">Faça uma consulta.</p>
+            {% endif %}
+    
+            {% if imoveis %}
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Número Contribuinte</th>
+                                <th>Ano Exercício</th>
+                                <th>Codlog Imovel</th>
+                                <th>Nome Logradouro</th>
+                                <th>Número Imovel</th>
+                                <th>Complemento</th>
+                                <th>Bairro</th>
+                                <th>CEP</th>
+                                <th>Área Terreno</th>
+                                <th>Área Construída</th>
+                                <th>Área Ocupada</th>
+                                <th>Valor m2 Terreno</th>
+                                <th>Valor m2 Construção</th>
+                                <th>Ano Construção Corrigido</th>
+                                <th>Pavimentos</th>
+                                <th>Tipo Uso Imovel</th>
+                                <th>Fator Obsolescência</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for imovel in imoveis %}
+                            <tr>
+                                <td>{{ imovel.numero_contribuinte|default_if_none:"" }}</td>
+                                <td>{{ imovel.ano_exercicio|default_if_none:"" }}</td>
+                                <td>{{ imovel.codlog_imovel|default_if_none:"" }}</td>
+                                <td>{{ imovel.nome_logradouro|default_if_none:"" }}</td>
+                                <td>{{ imovel.numero_imovel|default_if_none:"" }}</td>
+                                <td>{{ imovel.complemento|default_if_none:"" }}</td>
+                                <td>{{ imovel.bairro|default_if_none:"" }}</td>
+                                <td>{{ imovel.cep|default_if_none:"" }}</td>
+                                <td>{{ imovel.area_terreno|default_if_none:"" }}</td>
+                                <td>{{ imovel.area_construida|default_if_none:"" }}</td>
+                                <td>{{ imovel.area_ocupada|default_if_none:"" }}</td>
+                                <td>{{ imovel.valor_m2_terreno|default_if_none:"" }}</td>
+                                <td>{{ imovel.valor_m2_construcao|default_if_none:"" }}</td>
+                                <td>{{ imovel.ano_construcao_corrigido|default_if_none:"" }}</td>
+                                <td>{{ imovel.pavimentos|default_if_none:"" }}</td>
+                                <td>{{ imovel.tipo_uso_imovel|default_if_none:"" }}</td>
+                                <td>{{ imovel.fator_obsolescencia|default_if_none:"" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if imoveis.has_previous %}
+                            <a href="?q={{ query }}&filter={{ selected_filter }}&page=1">&laquo;</a>
+                            <a href="?q={{ query }}&filter={{ selected_filter }}&page={{ imoveis.previous_page_number }}">&#8249;</a>
+                        {% endif %}
+                        <span class="current">
+                            {{ imoveis.number }}
+                        </span>
+                        {% if imoveis.has_next %}
+                            <a href="?q={{ query }}&filter={{ selected_filter }}&page={{ imoveis.next_page_number }}">&#8250;</a>
+                            <a href="?q={{ query }}&filter={{ selected_filter }}&page={{ imoveis.paginator.num_pages }}">&raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

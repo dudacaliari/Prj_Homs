@@ -1,0 +1,100 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: 
+        url('/static/media/Fundo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed; /* Agora cobre toda a tela */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.832); /* Cor azul com opacidade */
+    z-index: 0; /* Mantém o pseudo-elemento atrás do conteúdo */
+    pointer-events: none; /* Não interfere com o conteúdo */
+}
+
+.login-box, .cadastro-box {
+    width: 250px;
+    margin: 100px auto;
+    padding: 30px;
+    padding-top: 15px;
+    background-color: rgba(255, 255, 255, 0.195);
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.Title_type{
+    color: white;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    height: 10px;
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #333;
+    font-size: 14px;
+}
+
+input::placeholder {
+    color: #777;
+}
+
+#imput_codigoadm{
+    background-color: #73737990;
+    color: white;
+}
+
+#imput_codigoadm::placeholder {
+    color: #ffffff;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2C2C54;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #7c7ab6;
+}
+
+a {
+    color: white;
+    text-align: center;
+    display: block;
+    margin-top: 20px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h2 {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}

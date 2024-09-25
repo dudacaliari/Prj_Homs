@@ -1,0 +1,346 @@
+html, body {
+    min-width: 100%;
+    max-width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+html{
+    min-height: 100%;
+    background-color: rgb(255, 255, 255);
+    
+}
+
+body{
+    font-family: rubik;
+}
+
+/*HEADER*/
+
+header{
+    width: 100%;
+    height: 100px; 
+    margin-top: 0%;
+    border-bottom: 3px solid #F3F3F8;
+}
+
+.logo{
+    margin-top: 30px;
+    width: 110px;
+    margin-left: 40px;
+}
+
+.username {
+    float: right;
+    font-family: rubik;
+    font-weight: 500;
+    color: #5B6EA6;
+    margin: 40px;
+}
+
+/* MENU LATERAL */
+
+.BarraLateral{
+    background-color: #f1e2fd;
+    margin: 0px 40px 0px 0px;
+    border-radius: 0px 20px 20px 0px;
+    width: 180px;
+}
+
+.BarraLateral nav ul { /*todos os elementos juntos*/
+    list-style: none;
+    padding: 0;
+    font-family: 'Rubik', sans-serif;
+    
+}
+
+.BarraLateral nav ul li { /*cada elemento (título)*/
+    margin: 30px;
+}
+
+.BarraLateral nav ul li a {
+    text-decoration: none;
+    color: #6C7A89;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.BarraLateral nav ul li a:hover {
+    background-color: rgba(118, 85, 179, 0.301);
+    color: rgb(94, 64, 148);
+}
+
+.selecionado {
+    background-color: rgba(168, 146, 209, 0.301);
+}
+
+/*NOVO CSV*/
+
+.div_csv{
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    flex-grow: 1;
+    margin: 7%;
+    width: 20%;
+    height: 35%;
+    border-radius: 8px;
+    background-color: #e4e5f5;
+}
+
+.textAddArq{
+    font-size: 20px;
+    color: #6b6b6b;
+}
+
+#btnImage{
+    width: 15px;
+}
+
+#btnCarregar{
+    text-align: center;
+    border-radius: 13px;
+    border: none;
+    padding-top: 6px;
+    width: 60px;
+    margin-left: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+#btnCarregar:hover{
+    background-color: rgba(144, 142, 210, 0.8);
+}
+
+.novo_csv{
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin-top: 10px;
+    height: 50px;
+    width: 80%;
+    display: flex;
+    margin-left: auto; 
+    margin-right: auto; 
+}
+
+.itens_csv{
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+#inputArq{
+    border: none;
+    font-family: rubik;
+    border-radius: 20px;
+    width: 100%; /* Garante que o input ocupe o tamanho da div */
+    padding: 5px;
+    overflow: hidden; /* Evita que o texto saia da div */
+    white-space: nowrap; /* Impede que o texto quebre em várias linhas */
+    text-overflow: ellipsis; /* Adiciona '...' se o texto for muito longo */
+    background-color: transparent; /* Remove fundo do input */ 
+}
+
+
+#inputArq::-webkit-file-upload-button {
+    border: none;
+    background-color: rgba(144, 142, 210, 0.8);
+    font-family: rubik;
+    border-radius: 8px;
+    color: #0f1c29;
+    padding: 12px;
+}
+
+/*TODOS OS ITENS BODY*/
+.bodyAll{
+    padding: 0px 0px 0px 0px;
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.pesquisa_tabela{
+    display: block;
+}
+
+/*FILTRO E PESQUISA*/
+.pesquisa{
+    display: flex;
+    margin-top: 60px;
+    margin-bottom: 20px;  
+}
+
+select{
+    appearance: none;
+    background-image: url('../media/Seta.png');
+    background-position: right 12px top 10px;
+    background-repeat: no-repeat;
+    border: none;
+    width: 210px;
+    padding: 10px 0px 10px 15px;
+    background-color: #F3F3F8;
+    color: #484964;
+    outline: none;
+    font-family: rubik;
+    border-radius: 10px;
+    margin-right: 10px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 3px 3px;
+}
+
+option{
+    background-color: #F3F3F8;
+    color: #484964;
+}
+
+#search_query{
+    min-width: 20%;
+    background-color: #F3F3F8;
+    border: none;
+    padding: 6px;
+    padding-left: 15px;
+    margin-left: 0px;
+    margin-right: 10px;
+    color: #242533;
+    outline: none;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 3px 3px;
+}
+
+::-webkit-input-placeholder {
+    color: #242533;
+    font-family: rubik;
+}
+
+.btnBuscar{
+    background-color: #C1B9F6;
+    border: 0px;
+    border-radius: 8px;
+    padding: 0px 20px 0px 20px;
+    font-family: rubik;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 3px 3px;
+    color: #242533;
+}
+
+.btnBuscar:hover{
+    background-color: #a198dc;
+}
+
+/*TABELA*/
+
+.table{
+    max-width: 1000px;
+    max-height: 400px;
+    overflow: auto;
+    margin-bottom: 20px;
+}
+
+table{
+    border-collapse: collapse;
+    border-color: #e0e0e0;
+}
+
+tr, th, td{
+    font-size: 12px;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1.5px solid #EEEEF2;
+    border-left:  1.5px solid #EEEEF2;
+    min-width: 100px;
+    height: 30px;
+    background-color: #F9F9FC;
+    color: #53546E;
+    padding: 12px;
+}
+
+tr:hover{
+    background-color: rgba(83, 80, 163, 0.8);
+}
+
+th{
+    font-family: rubik;
+}
+
+/*FRASE*/
+.Frase{
+    margin-left: 10px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/*SCROLL BAR*/
+
+::-webkit-scrollbar-track
+{
+    margin-top: 20px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: rgba(255, 255, 255, 0);
+}
+
+::-webkit-scrollbar
+{
+    margin-top: 20px;
+    border-radius: 12px;
+	width: 10px;
+	background-color: rgba(0,0,0,0);
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(29, 38, 135, 0.3);
+	background-color: rgba(0,0,0,.1);
+}
+
+/*PAGINAÇÃO*/
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    font-family: rubik;
+    font-size: small;
+}
+
+.step-links {
+    display: flex;
+    gap: 10px;
+}
+
+.step-links a,
+.step-links .current {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    text-decoration: none;
+    color: #C1B9F6;
+    border-radius: 50%;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.step-links a:hover {
+    background-color: #C1B9F6;
+    color: white;
+}
+
+.step-links .current {
+    background-color: #C1B9F6;
+    color: white;
+    font-weight: bold;
+}
+
+/*MAPA*/
+
+#map {
+    height: 500px; /* Ou outro valor de altura */
+    width: 100%; /* Largura opcional */
+}
+
+.itens_mapa{
+    display: block;
+}

@@ -1,0 +1,4 @@
+Django>=3.2.0
+pandas
+django-background-tasks
+mysqlclient

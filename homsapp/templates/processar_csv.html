@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_index.css' %}">
+    <script src="{% static 'homsapp/script.js' %}"></script>
+    <link href="https://fonts.cdnfonts.com/css/apercu-pro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet" />
+    <title>Carregar CSV</title>
+</head>
+
+<body>
+    <header>
+        <img class="logo" src="{% static '/media/Logo.png' %}" />
+        {% if user.is_authenticated %}
+            <span class="username">{{ user.nome }}</span>
+        {% endif %}
+    </header>
+    <div div class="bodyAll">
+        <div class="BarraLateral">
+            <nav>
+              <ul>
+                <li><a href="{% url 'index' %}">Consulta de Imóveis</a></li>
+                <li><a href="{% url 'mapa' %}">Mapeamento</a></li>
+        
+                {% if user.is_authenticated and user.tipo_usuario == 'admin' %}
+                  <li><a class="selecionado" href="{% url 'processar_csv' %}">Carregar CSV</a></li>
+                {% endif %}
+              </ul>
+            </nav>
+        </div>
+        <div class="div_csv">  
+            <form action="{% url 'processar_csv' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="itens_csv">
+                    <a class="textAddArq">Selecione um Arquivo</a>
+                    <div class="novo_csv">
+                        <input type="file" id="inputArq" name="csv_file">
+                        <button type="submit" id="btnCarregar"><img id="btnImage" src="{% static '/media/Check.png' %}" /></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
