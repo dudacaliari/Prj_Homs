@@ -23,9 +23,7 @@
         <div class="BarraLateral">
             <nav>
               <ul>
-                <li><a href="{% url 'index' %}">Consulta de Imóveis</a></li>
-                <li><a href="{% url 'mapa' %}">Mapeamento</a></li>
-        
+                <li><a href="{% url 'index' %}">Consulta de Imóveis</a></li>        
                 {% if user.is_authenticated and user.tipo_usuario == 'admin' %}
                   <li><a class="selecionado" href="{% url 'processar_csv' %}">Carregar CSV</a></li>
                 {% endif %}

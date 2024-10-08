@@ -333,14 +333,3 @@ th{
     color: white;
     font-weight: bold;
 }
-
-/*MAPA*/
-
-#map {
-    height: 500px; /* Ou outro valor de altura */
-    width: 100%; /* Largura opcional */
-}
-
-.itens_mapa{
-    display: block;
-}
