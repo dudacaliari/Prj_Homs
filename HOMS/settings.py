@@ -73,18 +73,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'HOMS.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-# Database settings
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.oracle',
-#        'NAME': 'localhost:1521/orclhm',
-#        'USER': 'system',
-#        'PASSWORD': 'tiger',
-#    }
-#}
-
 # settings.py
 
 DATABASES = {
@@ -100,10 +88,6 @@ DATABASES = {
         }
     }
 }
-
-
-
-
 
 
 
