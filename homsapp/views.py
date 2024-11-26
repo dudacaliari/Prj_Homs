@@ -55,10 +55,6 @@ def index_view(request):
     return render(request, 'index.html')
 
 @login_required
-def mapa_view(request):
-    return render(request, 'mapa.html')
-
-@login_required
 @user_passes_test(lambda user: user.tipo_usuario == User.ADMINISTRADOR)
 # Função para processar um Novo CSV
 def processar_csv(request):
@@ -186,10 +182,3 @@ def index_view(request):
         'query': query,
         'selected_filter': selected_filter
     })
-
-def mapa_view(request):
-    # Busca todos os imóveis com latitude e longitude
-    imoveis = list(Imovel.objects.filter(latitude__isnull=False, longitude__isnull=False).values('numero_contribuinte', 'latitude', 'longitude'))
-    
-    # Renderiza o template, passando a lista de imóveis
-    return render(request, 'mapa.html', {'imoveis': imoveis})

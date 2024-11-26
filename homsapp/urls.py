@@ -6,6 +6,5 @@ urlpatterns = [
     path('login/', views.login_view, name='login_view'),
     path('cadastro/', views.cadastro_view, name='cadastro_view'),
     path('index/', views.index_view, name='index'),
-    path('mapa/', views.mapa_view, name='mapa'),  # Mapear para 'mapa'
     path('processar_csv/', views.processar_csv, name='processar_csv'),
 ]
