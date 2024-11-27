@@ -15,38 +15,46 @@ class CadastroLoginCSVTestCase(TestCase):
             email='user@example.com', nome='User', password='user123'
         )
 
-    def print_result(self, test_name, expected, result):
+    def print_detailed_result(self, test_name, etapas):
         """
         Função para imprimir o resultado dos testes de maneira detalhada.
         """
         print(f"\nTeste: {test_name}")
-        print(f"Esperado: {expected}")
-        print(f"Resultado: {result}")
-        if expected == result:
-            print("OK!\n")
+        for idx, (descricao, resultado) in enumerate(etapas, 1):
+            status = "OK" if resultado else "FALHOU"
+            print(f"{idx}. {descricao} - {status}")
+        if all(resultado for _, resultado in etapas):
+            print("Resultado Final: OK!\n")
         else:
-            print("Falhou!\n")
+            print("Resultado Final: FALHOU!\n")
 
+    
     def test_filtro_busca_imovel(self):
         Imovel.objects.create(
             numero_contribuinte='123456', nome_logradouro='Rua Teste', bairro='Centro'
         )
         response = self.client.get(reverse('index'), {'q': 'Rua Teste', 'filter': 'endereco'})
-        # Esperado é a presença do texto 'Rua Teste' na resposta
-        expected = 'Rua Teste'
-        # O resultado será a mesma coisa, se a busca for bem-sucedida
-        result = 'Rua Teste' if response.status_code == 200 and 'Rua Teste' in response.content.decode() else None
-        self.print_result('filtro_busca_imovel', expected, result)
+        etapas = [
+            ("Criar um imóvel no banco de dados para teste.",
+             Imovel.objects.filter(nome_logradouro='Rua Teste').exists()),
+            ("Enviar requisição GET para buscar o imóvel pelo nome logradouro.",
+             response.status_code == 200),
+            ("Verificar se o imóvel buscado está na resposta.",
+             'Rua Teste' in response.content.decode())
+        ]
+        self.print_detailed_result('filtro_busca_imovel', etapas)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Rua Teste')
 
     def test_login_com_credenciais_invalidas(self):
         response = self.client.post(reverse('login_view'), {'email': 'wrong@example.com', 'password': 'wrongpassword'})
-        # Esperado é a mensagem de 'Invalid credentials'
-        expected = 'Invalid credentials'
-        # O resultado será a mesma mensagem, se ela estiver presente na resposta
-        result = 'Invalid credentials' if response.status_code == 200 and 'Invalid credentials' in response.content.decode() else None
-        self.print_result('login_com_credenciais_invalidas', expected, result)
+        etapas = [
+            ("Enviar requisição POST com e-mail e senha inválidos.",
+             response.status_code == 200),
+            ("Verificar se a mensagem 'Invalid credentials' está presente.",
+             'Invalid credentials' in response.content.decode())
+        ]
+        self.print_detailed_result('login_com_credenciais_invalidas', etapas)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Invalid credentials')
 
@@ -54,52 +62,68 @@ class CadastroLoginCSVTestCase(TestCase):
         for i in range(25):
             Imovel.objects.create(numero_contribuinte=f'{i}', nome_logradouro='Rua Teste')
         response = self.client.get(reverse('index') + '?page=2')
-        # Esperado é que a resposta contenha 'Rua Teste' (pelo menos 10 vezes por página)
-        expected = 'Rua Teste'
-        # O resultado será 'Rua Teste', se estiver presente na página
-        result = 'Rua Teste' if response.status_code == 200 and 'Rua Teste' in response.content.decode() else None
-        self.print_result('paginacao_imoveis', expected, result)
+        etapas = [
+            ("Criar 25 imóveis no banco de dados para teste de paginação.",
+             Imovel.objects.count() == 25),
+            ("Enviar requisição GET para a segunda página de resultados.",
+             response.status_code == 200),
+            ("Verificar se há exatamente 10 itens na página de resposta.",
+             response.content.decode().count('Rua Teste') == 10)
+        ]
+        self.print_detailed_result('paginacao_imoveis', etapas)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Rua Teste', count=10)
 
     def test_segurança_acesso_csv_sem_permissao(self):
         self.client.login(email='user@example.com', password='user123')
         response = self.client.get(reverse('processar_csv'))
-        # Esperado é que o usuário seja redirecionado
-        expected = '/accounts/login/'
-        # O resultado será o URL de redirecionamento se o código de status for 302
-        result = '/accounts/login/' if response.status_code == 302 else None
-        self.print_result('segurança_acesso_csv_sem_permissao', expected, result)
+        etapas = [
+            ("Logar no sistema como um usuário comum.",
+             self.client.session['_auth_user_id'] == str(self.comum.id)),
+            ("Tentar acessar a página de upload de CSV sem permissões de administrador.",
+             response.status_code == 302)
+        ]
+        self.print_detailed_result('segurança_acesso_csv_sem_permissao', etapas)
         self.assertEqual(response.status_code, 302)
 
     def test_upload_csv_admin(self):
         self.client.login(email='admin@example.com', password='admin123')
         csv_file = SimpleUploadedFile("test.csv", b"col1,col2\nval1,val2", content_type="text/csv")
         response = self.client.post(reverse('processar_csv'), {'csv_file': csv_file})
-        # Esperado é que o upload do CSV seja bem-sucedido e redirecione
-        expected = 'Redirecionamento após upload de CSV'
-        # O resultado será 'Redirecionamento após upload de CSV', se o código de status for 302
-        result = 'Redirecionamento após upload de CSV' if response.status_code == 302 else None
-        self.print_result('upload_csv_admin', expected, result)
+        etapas = [
+            ("Logar no sistema como administrador.",
+             self.client.session['_auth_user_id'] == str(self.admin.id)),
+            ("Enviar um arquivo CSV válido para upload.",
+             response.status_code == 302),
+            ("Verificar se o sistema redirecionou após o upload.",
+             response.url is not None)
+        ]
+        self.print_detailed_result('upload_csv_admin', etapas)
         self.assertEqual(response.status_code, 302)
 
     def test_upload_csv_sem_permissao(self):
         self.client.login(email='user@example.com', password='user123')
         response = self.client.post(reverse('processar_csv'), {})
-        # Esperado é que o usuário sem permissão seja redirecionado
-        expected = '/accounts/login/'
-        # O resultado será o URL de redirecionamento se o código de status for 302
-        result = '/accounts/login/' if response.status_code == 302 else None
-        self.print_result('upload_csv_sem_permissao', expected, result)
+        etapas = [
+            ("Logar no sistema como um usuário comum.",
+             self.client.session['_auth_user_id'] == str(self.comum.id)),
+            ("Tentar enviar um arquivo CSV sem permissões de administrador.",
+             response.status_code == 302)
+        ]
+        self.print_detailed_result('upload_csv_sem_permissao', etapas)
         self.assertEqual(response.status_code, 302)
 
     def test_visualizar_imoveis(self):
         Imovel.objects.create(numero_contribuinte='123456', nome_logradouro='Rua Teste', bairro='Centro')
         response = self.client.get(reverse('index'))
-        # Esperado é que a resposta contenha 'Rua Teste'
-        expected = 'Rua Teste'
-        # O resultado será 'Rua Teste', se estiver presente na resposta
-        result = 'Rua Teste' if response.status_code == 200 and 'Rua Teste' in response.content.decode() else None
-        self.print_result('visualizar_imoveis', expected, result)
+        etapas = [
+            ("Criar um imóvel no banco de dados para teste.",
+             Imovel.objects.filter(nome_logradouro='Rua Teste').exists()),
+            ("Enviar requisição GET para visualizar imóveis cadastrados.",
+             response.status_code == 200),
+            ("Verificar se o imóvel está presente na resposta.",
+             'Rua Teste' in response.content.decode())
+        ]
+        self.print_detailed_result('visualizar_imoveis', etapas)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Rua Teste')
