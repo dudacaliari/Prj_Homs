@@ -28,7 +28,56 @@ class CadastroLoginCSVTestCase(TestCase):
         else:
             print("Resultado Final: FALHOU!\n")
 
-    
+    def test_cadastro_usuario(self):
+        """
+        Testa o cadastro de usuários com validação de administrador e mensagens no terminal.
+        """
+        etapas = []
+
+        # Pré-condição: A página de cadastro deve estar acessível
+        response_get = self.client.get(reverse('cadastro_view'))
+        etapas.append(("Acessar a página de cadastro de usuários.", response_get.status_code == 200))
+
+        # Teste 1: Cadastro de usuário comum
+        response_post_user = self.client.post(reverse('cadastro_view'), {
+            'nome': 'Novo Usuario',
+            'email': 'novo_usuario@example.com',
+            'password': 'senha123',
+            'codigo_acesso': ''  # Sem código de acesso, será usuário comum
+        })
+        user_created = User.objects.filter(email='novo_usuario@example.com').exists()
+        etapas.append(("Preencher os campos obrigatórios e enviar o formulário (usuário comum).", user_created))
+        etapas.append(("Verificar redirecionamento para a página de login (usuário comum).", response_post_user.status_code == 302))
+
+        # Teste 2: Cadastro de administrador
+        response_post_admin = self.client.post(reverse('cadastro_view'), {
+            'nome': 'Novo Admin',
+            'email': 'novo_admin@example.com',
+            'password': 'senha123',
+            'codigo_acesso': 'admin123'  # Código de acesso para administrador
+        })
+        admin_created = User.objects.filter(email='novo_admin@example.com', tipo_usuario=User.ADMINISTRADOR).exists()
+        etapas.append(("Preencher os campos obrigatórios e enviar o formulário (administrador).", admin_created))
+        etapas.append(("Verificar redirecionamento para a página de login (administrador).", response_post_admin.status_code == 302))
+
+        # Teste 3: Cadastro com e-mail já existente
+        response_post_duplicate = self.client.post(reverse('cadastro_view'), {
+            'nome': 'Usuario Duplicado',
+            'email': 'novo_usuario@example.com',  # E-mail já cadastrado
+            'password': 'senha123',
+            'codigo_acesso': ''
+        })
+        etapas.append(("Tentar cadastrar com e-mail já existente.", response_post_duplicate.status_code == 200))
+
+        self.print_detailed_result('cadastro_usuario', etapas)
+
+        # Validações finais
+        self.assertTrue(user_created)
+        self.assertTrue(admin_created)
+        self.assertEqual(response_post_user.status_code, 302)
+        self.assertEqual(response_post_admin.status_code, 302)
+        self.assertEqual(response_post_duplicate.status_code, 200)
+
     def test_filtro_busca_imovel(self):
         Imovel.objects.create(
             numero_contribuinte='123456', nome_logradouro='Rua Teste', bairro='Centro'
